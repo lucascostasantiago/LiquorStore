@@ -22,6 +22,7 @@ namespace LiquorStore.ViewModels
         [Column("Rua")]
         public string Street { get; set; }
 
-        public virtual ICollection<UserClientViewModel> Users { get; set; }
+        public virtual ICollection<UserClientViewModel> UserClient { get; set; }
+        public virtual ICollection<UserSellerViewModel> UserSeller { get; set; }
     }
 }

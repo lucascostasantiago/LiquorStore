@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LiquorStore.ViewModels
 {
-    [Table("PessoaFisica")]
+    [Table("CPF")]
     public class PhysicalPersonViewModel : BaseViewModel
     {
         [Column("CPF")]
@@ -13,6 +13,6 @@ namespace LiquorStore.ViewModels
         [Column("Name")]
         public string Name { get; set; }
 
-        public virtual ICollection<UserClientViewModel> Users { get; set; }
+        public virtual ICollection<UserClientViewModel> UserClient { get; set; }
     }
 }

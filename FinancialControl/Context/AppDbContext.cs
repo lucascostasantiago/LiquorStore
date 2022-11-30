@@ -37,9 +37,11 @@ namespace LiquorStore.Context
             builder.SeedModel();
             builder.SeedInitalAddress();
             builder.SeedInitialPhysicalPerson();
-            builder.SeedInitialUser();
+            builder.SeedInitialUserClient();
             builder.SeedInitialProduct();
             builder.SeedInitialSalesHistory();
+            builder.SeedInitialLegalPerson();
+            builder.SeedInitialUserSeller();
         }
 
         public void Configure(ModelBuilder builder)
@@ -57,6 +59,9 @@ namespace LiquorStore.Context
             {
                 entity.Property(e => e.CPF).IsRequired();
                 entity.Property(e => e.Name).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
+                entity.HasIndex(e => e.CPF).IsUnique();
             });
 
             builder.Entity<ProductsViewModel>(entity =>
@@ -66,6 +71,9 @@ namespace LiquorStore.Context
                 entity.Property(e => e.Price).IsRequired();
                 entity.Property(e => e.Amount).IsRequired();
                 entity.Property(e => e.Type).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
+                entity.HasIndex(e => e.ProductCode).IsUnique();
             });
 
             builder.Entity<SalesHistoryViewModel>(entity =>
@@ -73,6 +81,8 @@ namespace LiquorStore.Context
                 entity.Property(e => e.ProductId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired();
                 entity.Property(e => e.Price).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
 
                 entity.HasOne(e => e.Products)
                       .WithMany(e => e.SalesHistories)
@@ -84,6 +94,8 @@ namespace LiquorStore.Context
                 entity.Property(e => e.ProductId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired();
                 entity.Property(e => e.ClientId).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
 
                 entity.HasOne(e => e.Products)
                       .WithMany(e => e.ShoppingCarts)
@@ -102,13 +114,49 @@ namespace LiquorStore.Context
                 entity.Property(e => e.Email).IsRequired();
                 entity.Property(e => e.UserType).IsRequired();
 
+                entity.HasIndex(e => e.Id).IsUnique();
+                entity.HasIndex(e => e.ContactNumber).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
+
+
                 entity.HasOne(e => e.Address)
-                      .WithMany(e => e.Users)
+                      .WithMany(e => e.UserClient)
                       .HasForeignKey(e => e.AddressId);
 
                 entity.HasOne(e => e.PhysicalPerson)
-                      .WithMany(e => e.Users)
+                      .WithMany(e => e.UserClient)
                       .HasForeignKey(e => e.CPFId);
+            });
+
+            builder.Entity<LegalPersonViewModel>(entity =>
+            {
+                entity.Property(e => e.CNPJ).IsRequired();
+                entity.Property(e => e.CompanyName).IsRequired();
+                entity.Property(e => e.Representative).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
+                entity.HasIndex(e => e.CNPJ).IsUnique();
+            });
+
+            builder.Entity<UserSellerViewModel>(entity =>
+            {
+                entity.Property(e => e.CNPJId).IsRequired();
+                entity.Property(e => e.AddressId).IsRequired();
+                entity.Property(e => e.ContactNumber).IsRequired();
+                entity.Property(e => e.Email).IsRequired();
+                entity.Property(e => e.UserType).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
+                entity.HasIndex(e => e.ContactNumber).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
+
+                entity.HasOne(e => e.Address)
+                      .WithMany(e => e.UserSeller)
+                      .HasForeignKey(e => e.AddressId);
+
+                entity.HasOne(e => e.LegalPerson)
+                      .WithMany(e => e.UserSeller)
+                      .HasForeignKey(e => e.CNPJId);
             });
         }
     }
