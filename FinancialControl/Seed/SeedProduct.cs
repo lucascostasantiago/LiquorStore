@@ -4,9 +4,9 @@ using System;
 
 namespace LiquorStore.Seed
 {
-    public static class SeedProducts
+    public static class SeedProduct
     { 
-        public static void SeedProduct(this ModelBuilder builder)
+        public static void SeedInitialProduct(this ModelBuilder builder)
         {
             builder.Entity<ProductsViewModel>().HasData(new ProductsViewModel() { Id = Guid.Parse("ca488ecc-0c36-45b0-a025-6f2fbfe0aff4"), ProductName = "Whisky Jack Daniels 1000 Ml", ProductCode = "1010/2022", Price = 140.00, Amount = 100, Type = "Whisky" });
             builder.Entity<ProductsViewModel>().HasData(new ProductsViewModel() { Id = Guid.Parse("a02baed8-52e8-469e-9ad3-cf256e29a9f0"), ProductName = "WHISKY JOHNNIE WALKER RED LABEL 1L", ProductCode = "2020/2022", Price = 100.00, Amount = 100, Type = "Whisky" });

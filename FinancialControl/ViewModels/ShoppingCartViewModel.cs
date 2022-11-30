@@ -1,18 +1,22 @@
 ﻿using FinancialControl.LiquorStore;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LiquorStore.ViewModels
 {
-    [Table("CarrinhoCompras")]
+    [Table("CarrinhoDeCompras")]
     public class ShoppingCartViewModel : BaseViewModel
     {
         [Column("Cliente")]
-        public string ClientId { get; set; }
+        public Guid ClientId { get; set; }
 
         [Column("CodigoProduto")]
-        public string ProductId { get; set; }
+        public Guid ProductId { get; set; }
 
-        [Column("Preco")]
-        public double Price { get; set; }
+        [Column("Quantia")]
+        public double Amount { get; set; }
+
+        public virtual ProductsViewModel Products { get; set; }
+        public virtual UserClientViewModel UserClient { get; set; }
     }
 }

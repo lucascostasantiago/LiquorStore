@@ -16,7 +16,7 @@ namespace LiquorStore.Controllers
         public UsersController(AppDbContext context) { _context = context; }
 
         [HttpPost]
-        public UserViewModel Create(UserViewModel expense)
+        public UserClientViewModel Create(UserClientViewModel expense)
         {
             try
             {
@@ -34,11 +34,11 @@ namespace LiquorStore.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<UserViewModel> GetExpenses()
+        public IEnumerable<UserClientViewModel> GetExpenses()
             => _context.Users;
 
         [HttpGet("{id}")]
-        public UserViewModel GetById(Guid id)
+        public UserClientViewModel GetById(Guid id)
             => _context.Users.FirstOrDefault(expense => expense.Id == id);
 
         [HttpDelete("{id}")]
@@ -54,7 +54,7 @@ namespace LiquorStore.Controllers
         }
 
         [HttpPut("{id}")]
-        public UserViewModel Update(Guid id, UserViewModel expense)
+        public UserClientViewModel Update(Guid id, UserClientViewModel expense)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace LiquorStore.Controllers
                 if (_context.SaveChanges() > 0)
                     return _context.Users.FirstOrDefault(exp => exp.Id == id);
                 else
-                    return new UserViewModel();
+                    return new UserClientViewModel();
             }
             catch (Exception ex)
             {

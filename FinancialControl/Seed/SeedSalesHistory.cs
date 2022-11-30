@@ -6,7 +6,7 @@ namespace LiquorStore.Seed
 {
     public static class SeedSalesHistory
     {
-        public static void SeedSalesHistorys(this ModelBuilder builder)
+        public static void SeedInitialSalesHistory(this ModelBuilder builder)
         {
             builder.Entity<SalesHistoryViewModel>().HasData(new SalesHistoryViewModel() { Id = Guid.Parse("95742b06-0dd0-45fa-81dc-706f79f9552e"), ProductId = Guid.Parse("def251a1-69e5-4d8d-a6a6-3710154eb6b3"), Amount = 3, Price = 7.50 });
             builder.Entity<SalesHistoryViewModel>().HasData(new SalesHistoryViewModel() { Id = Guid.Parse("ebed77af-213b-498b-95f0-b5ddf1acf184"), ProductId = Guid.Parse("86337ec5-cb59-493f-8e0f-2501c2125e51"), Amount = 2, Price = 14.00 });

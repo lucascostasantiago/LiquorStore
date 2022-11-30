@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LiquorStore.ViewModels
 {
-    [Table("HistoricoVendas")]
+    [Table("HistoricoDeVendas")]
     public class SalesHistoryViewModel : BaseViewModel
     {
         [Column("CodigoProduto")]

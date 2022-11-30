@@ -23,5 +23,6 @@ namespace LiquorStore.ViewModels
         public string Type { get; set; }
 
         public virtual ICollection<SalesHistoryViewModel> SalesHistories { get; set; }
+        public virtual ICollection<ShoppingCartViewModel> ShoppingCarts { get; set; }
     }
 }

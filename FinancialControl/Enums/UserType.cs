@@ -6,7 +6,9 @@ namespace LiquorStore.Enums
     {
         [Display(Name = "ADMIN")]
         ADMIN = 0,
-        [Display(Name = "CONSUMER")]
-        CONSUMER = 1
+        [Display(Name = "CUSTOMER")]
+        CUSTOMER = 1,
+        [Display(Name = "SELLER")]
+        SELLER = 2
     }
 }

@@ -1,6 +1,27 @@
-﻿namespace LiquorStore.ViewModels
+﻿using FinancialControl.LiquorStore;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LiquorStore.ViewModels
 {
-    public class AddressViewModel
+    [Table("Endereco")]
+    public class AddressViewModel : BaseViewModel
     {
+        [Column("Estado")]
+        public string State { get; set; }
+
+
+        [Column("Cidade")]
+        public string City { get; set; }
+
+
+        [Column("Bairro")]
+        public string Neighborhood { get; set; }
+
+
+        [Column("Rua")]
+        public string Street { get; set; }
+
+        public virtual ICollection<UserClientViewModel> Users { get; set; }
     }
 }
