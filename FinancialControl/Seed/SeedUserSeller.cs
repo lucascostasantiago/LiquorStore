@@ -18,7 +18,6 @@ namespace LiquorStore.Seed
             builder.Entity<UserSellerViewModel>().HasData(new UserSellerViewModel() { Id = Guid.Parse("8dc7eac1-aa1b-4cc2-8d12-1e6e772b9352"), CNPJId = Guid.Parse("73a08f06-7a0b-4378-a483-04125276ff23"), AddressId = Guid.Parse("dcd2bdb5-93ce-4810-ac85-5faff4996546"), Email = "pedro@gmail.com", ContactNumber = "(88) 13470-1323", UserType = Enums.UserType.SELLER });
             builder.Entity<UserSellerViewModel>().HasData(new UserSellerViewModel() { Id = Guid.Parse("4d77813e-46d9-436b-a14c-6ff82912ae63"), CNPJId = Guid.Parse("f821a712-a18f-4fc3-a877-7ccac48823c2"), AddressId = Guid.Parse("9c06c239-c51b-4a89-b70f-902c2289ce9d"), Email = "carla@gmail.com", ContactNumber = "(88) 86602-5652", UserType = Enums.UserType.SELLER });
             builder.Entity<UserSellerViewModel>().HasData(new UserSellerViewModel() { Id = Guid.Parse("e2b0ad12-2aba-4635-b647-3c6861809064"), CNPJId = Guid.Parse("db39ac3e-21d3-4520-b35f-976d4b247905"), AddressId = Guid.Parse("b8caa459-b828-47c0-8eb3-b2186b509807"), Email = "carlos@gmail.com", ContactNumber = "(88) 32751-5601", UserType = Enums.UserType.SELLER });
-
         }
     }
 }

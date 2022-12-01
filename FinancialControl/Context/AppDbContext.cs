@@ -42,6 +42,8 @@ namespace LiquorStore.Context
             builder.SeedInitialSalesHistory();
             builder.SeedInitialLegalPerson();
             builder.SeedInitialUserSeller();
+            builder.SeedInitialAdminUser();
+            builder.SeedInitialShoppingCart();
         }
 
         public void Configure(ModelBuilder builder)
@@ -59,6 +61,7 @@ namespace LiquorStore.Context
             {
                 entity.Property(e => e.CPF).IsRequired();
                 entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.BirthDate).IsRequired();
 
                 entity.HasIndex(e => e.Id).IsUnique();
                 entity.HasIndex(e => e.CPF).IsUnique();
@@ -157,6 +160,20 @@ namespace LiquorStore.Context
                 entity.HasOne(e => e.LegalPerson)
                       .WithMany(e => e.UserSeller)
                       .HasForeignKey(e => e.CNPJId);
+            });
+
+            builder.Entity<AdminUserViewModel>(entity =>
+            {
+                entity.Property(e => e.CNPJ).IsRequired();
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Email).IsRequired();
+                entity.Property(e => e.ContactNumber).IsRequired();
+                entity.Property(e => e.UserType).IsRequired();
+
+                entity.HasIndex(e => e.Id).IsUnique();
+                entity.HasIndex(e => e.CNPJ).IsUnique();
+                entity.HasIndex(e => e.ContactNumber).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
             });
         }
     }
