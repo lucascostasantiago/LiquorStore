@@ -1,9 +1,11 @@
 ﻿using LiquorStore.Context;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System;
 using LiquorStore.ViewModels;
+using LiquorStore.Entities;
+using LiquorStore.DTO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace LiquorStore.Controllers
 {
@@ -13,72 +15,109 @@ namespace LiquorStore.Controllers
     {
         private readonly AppDbContext _context;
 
-        public ProductsController(AppDbContext context) { _context = context; }
+        public ProductsController(AppDbContext context) 
+        { 
+            _context = context;
+        }
 
         [HttpPost]
-        public ProductsViewModel Create(ProductsViewModel expense)
+        public ProductsDTO CreateProduct(ProductsViewModel vm)
         {
-            try
+            bool validate = false;
+            do
             {
-                _context.Products.Add(expense);
+                var productCode = Guid.NewGuid().ToString().ToUpper().Substring(0, 8);
+                var products = _context.Products.FirstOrDefault(products => products.ProductCode == productCode);
+                if (products == null)
+                {
+                    vm.ProductCode = productCode;
+                    validate = true;
+                }
+            } while (validate == false);
 
-                if (_context.SaveChanges() > 0)
-                    return _context.Products.FirstOrDefault(exp => exp.Id == expense.Id);
-                else
-                    throw new Exception("Você não conseguiu adicionar um novo usuário.");
-            }
-            catch (Exception ex)
+            ProductsEntity productsEntity = new ProductsEntity() { ProductCode = vm.ProductCode, ProductName = vm.ProductName, Price = vm.Price, Amount = vm.Amount, Type = vm.Type, CreationDate = DateTime.Now, };
+            _context.Products.Add(productsEntity);
+
+            if (_context.SaveChanges() > 0)
             {
-                throw ex;
+                var entity = _context.Products.FirstOrDefault(product => product.ProductCode == vm.ProductCode);
+                ProductsDTO productsDTO = new ProductsDTO() { Id = entity.Id, ProductCode = entity.ProductCode, ProductName = entity.ProductName, Price = entity.Price, Amount = entity.Amount, Type = entity.Type, CreationDate = entity.CreationDate, UpdateDate = entity.UpdateDate };
+                return productsDTO;
             }
+            else
+                throw new Exception("Não foi possível adicionar um novo produto.");
         }
 
         [HttpGet]
-        public IEnumerable<ProductsViewModel> GetExpenses()
-            => _context.Products;
+        public List<ProductsDTO> GetProducts()
+        {
+            List<ProductsDTO> productsDTO = new List<ProductsDTO>();
+
+            var products = _context.Products;
+            foreach (var product in products)
+            {
+                productsDTO.Add(new ProductsDTO
+                {
+                    Id = product.Id,
+                    ProductCode = product.ProductCode,
+                    ProductName = product.ProductName,
+                    Price = product.Price,
+                    Amount = product.Amount,
+                    Type = product.Type,
+                    CreationDate = product.CreationDate,
+                    UpdateDate = product.UpdateDate
+                });
+            }
+            return productsDTO;
+        }
 
         [HttpGet("{id}")]
-        public ProductsViewModel GetById(Guid id)
-            => _context.Products.FirstOrDefault(expense => expense.Id == id);
+        public ProductsDTO GetById(Guid id)
+        {
+            var entity = _context.Products.FirstOrDefault(product => product.Id == id);
+            if(entity == null) throw new Exception("Produto não existente.");
+            ProductsDTO productsDTO = new ProductsDTO() { Id = entity.Id, ProductCode = entity.ProductCode, ProductName = entity.ProductName, Price = entity.Price, Amount = entity.Amount, Type = entity.Type, CreationDate = entity.CreationDate, UpdateDate = entity.UpdateDate };
+            return productsDTO;
+        }
 
         [HttpDelete("{id}")]
         public bool Delete(Guid id)
         {
-            try
-            {
-                var expense = _context.Users.FirstOrDefault(exp => exp.Id == id);
-                if (expense == null)
-                    throw new Exception("Você está tentando remover um usuário que não existe.");
-
-                _context.Remove(expense);
-
-                return _context.SaveChanges() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            var product = _context.Products.FirstOrDefault(product => product.Id == id);
+            if (product == null) throw new Exception("Você está tentando remover um usuário que não existe.");
+            _context.Products.Remove(product);
+            if (_context.SaveChanges() > 0)
+                return true;
+            else
+                throw new Exception("Não foi possível remover o produto.");        
         }
 
-        [HttpPut("{id}")]
-        public ProductsViewModel Update(Guid id, ProductsViewModel expense)
+        [HttpPut]
+        public ProductsDTO Update(ProductsViewModel vm)
         {
-            try
-            {
-                if (expense.Id != id)
-                    throw new Exception("Você está tentando atualizar um usuário que não existe.");
+            Validate(vm);
+            ProductsEntity productsEntity = new ProductsEntity() { Id = vm.Id, Type = vm.Type, Price = vm.Price, Amount = vm.Amount, ProductCode = vm.ProductCode, ProductName = vm.ProductName, CreationDate = vm.CreationDate, UpdateDate = DateTime.Now };
 
-                _context.Update(expense);
+            _context.Update(productsEntity);
 
-                if (_context.SaveChanges() > 0)
-                    return _context.Products.FirstOrDefault(exp => exp.Id == id);
-                else
-                    return new ProductsViewModel();
-            }
-            catch (Exception ex)
+            if (_context.SaveChanges() > 0)
             {
-                throw ex;
+                var entity = _context.Products.FirstOrDefault(product => product.Id == vm.Id);
+                ProductsDTO productsDTO = new ProductsDTO() { Id = entity.Id, ProductCode = entity.ProductCode, ProductName = entity.ProductName, Price = entity.Price, Amount = entity.Amount, Type = entity.Type, CreationDate = entity.CreationDate, UpdateDate = entity.UpdateDate };
+                return productsDTO;
             }
+            else
+                throw new Exception("Não foi possível atualizar este produto.");
+        }
+
+        private static void Validate(ProductsViewModel vm)
+        {
+            if (vm.Id == Guid.Parse("00000000-0000-0000-0000-000000000000")) throw new Exception("Campo Id inválido!");
+            if (vm.ProductName == null) throw new Exception("Campo ProductName inválido!");
+            if (vm.ProductCode == null) throw new Exception("Campo ProductCode inválido!");
+            if (vm.Price == 0) throw new Exception("Campo Price inválido!");
+            if (vm.Type == null) throw new Exception("Campo Type inválido!");
+            if (vm.CreationDate == DateTime.Parse("01/01/0001 00:00:00")) throw new Exception("Campo CreationDate inválido!");
         }
     }
 }

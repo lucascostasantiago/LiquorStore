@@ -1,8 +1,8 @@
-﻿using FinancialControl.LiquorStore;
+﻿using LiquorStore.DTO.Base;
 
-namespace LiquorStore.ViewModels
+namespace LiquorStore.DTO
 {
-    public class ProductsViewModel : BaseViewModel
+    public class ProductsDTO : BaseDTO
     {
         public string ProductName { get; set; }
         public string ProductCode { get; set; }

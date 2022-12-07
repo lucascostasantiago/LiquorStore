@@ -1,7 +1,8 @@
 ﻿using System;
-namespace FinancialControl.LiquorStore
+
+namespace LiquorStore.DTO.Base
 {
-    public class BaseViewModel
+    public class BaseDTO
     {
         public Guid Id { get; set; }
         public DateTime CreationDate { get; set; }
