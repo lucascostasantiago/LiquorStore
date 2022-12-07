@@ -8,9 +8,9 @@ namespace LiquorStore.Entities
     public class ShoppingCartEntity : BaseEntity
     {
         [Column("Cliente")]
-        public Guid? ClientId { get; set; } = null;
+        public Guid ClientId { get; set; }
 
-        [Column("CodigoProduto")]
+        [Column("ProdutoId")]
         public Guid ProductId { get; set; }
 
         [Column("Quantia")]

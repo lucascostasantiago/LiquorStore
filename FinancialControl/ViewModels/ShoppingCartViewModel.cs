@@ -1,12 +1,14 @@
 ﻿using FinancialControl.LiquorStore;
-using System;
+using LiquorStore.Enums;
 
 namespace LiquorStore.ViewModels
 {
     public class ShoppingCartViewModel : BaseViewModel
     {
-        public Guid? ClientId { get; set; } = null;
-        public Guid ProductId { get; set; }
         public double Amount { get; set; }
+        public string ProductCode { get; set; }
+        public string ClientCPF { get; set; }
+        public double TotalPurchaseAmount { get; set; }
+        public FormOfPayment FormOfPayment { get; set; }
     }
 }
