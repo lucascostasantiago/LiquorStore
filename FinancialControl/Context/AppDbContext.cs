@@ -15,6 +15,9 @@ namespace LiquorStore.Context
         public DbSet<ShoppingCartEntity> ShoppingCarts { get; set; }
         public DbSet<SalesHistoryEntity> SalesHistories { get; set; }
         public DbSet<PhysicalPersonEntity> PhysicalPerson { get; set; }
+        public DbSet<AddressEntity> Address { get; set; }
+        public DbSet<LegalPersonEntity> LegalPerson { get; set; }
+        public DbSet<SalesHistoryEntity> SalesHistory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

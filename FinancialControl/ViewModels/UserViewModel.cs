@@ -12,5 +12,15 @@ namespace LiquorStore.ViewModels
         public string ContactNumber { get; set; }
         public string Email { get; set; }
         public UserType UserType { get; set; }
+        public string CPF { get; set; }
+        public string CNPJ { get; set; }
+        public string CompanyName { get; set; }
+        public string Representative { get; set; }
+        public string Name { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string State { get; set; }
+        public string City { get; set; }
+        public string Neighborhood { get; set; }
+        public string Street { get; set; }
     }
 }

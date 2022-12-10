@@ -7,7 +7,7 @@ namespace LiquorStore.Entities
     [Table("HistoricoDeVendas")]
     public class SalesHistoryEntity : BaseEntity
     {
-        [Column("CodigoProduto")]
+        [Column("ProdutoId")]
         public Guid ProductId { get; set; }
 
         [Column("Quantidade")]
