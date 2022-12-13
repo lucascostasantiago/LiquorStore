@@ -56,73 +56,60 @@ namespace LiquorStore.Controllers
         }
 
         [HttpPost]
-        [Route("RegisterCustomer")]
+        [Route("RegisterUser")]
         public UserDTO RegisterCustomer(UserViewModel vm)
         {
-            var cpfExist = _context.PhysicalPerson.FirstOrDefault(x => x.CPF == vm.CPF);
-            if (cpfExist != null) throw new Exception("CPF já cadastrado");
+            UserDTO userDTO = new UserDTO();
 
-            var emailExist = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
-            if (emailExist != null) throw new Exception("Email já cadastrado");
 
-            AddressEntity addressEntity = new AddressEntity() { City = vm.City, State = vm.State, Neighborhood = vm.Neighborhood, Street = vm.Street, CreationDate = DateTime.Now };
-            _context.Address.Add(addressEntity);
+            if (vm.CPF != null)
+            {
+                var cpfExist = _context.PhysicalPerson.FirstOrDefault(x => x.CPF == vm.CPF);
+                if (cpfExist != null) throw new Exception("CPF já cadastrado");
 
-            PhysicalPersonEntity physicalPersonEntity = new PhysicalPersonEntity() { CPF = vm.CPF, Name = vm.Name, BirthDate = vm.BirthDate, CreationDate = DateTime.Now };
-            _context.PhysicalPerson.Add(physicalPersonEntity);
+                var emailExist = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
+                if (emailExist != null) throw new Exception("Email já cadastrado");
 
-            UserEntity userEntity = new UserEntity() { AddressId = addressEntity.Id, CPFId = physicalPersonEntity.Id, ContactNumber = vm.ContactNumber, Email = vm.Email, UserType = Enums.UserType.CUSTOMER, CreationDate = DateTime.Now };
-            _context.Users.Add(userEntity);
+                PhysicalPersonEntity physicalPersonEntity = new PhysicalPersonEntity() { CPF = vm.CPF, Name = vm.Name, BirthDate = vm.BirthDate, CreationDate = DateTime.Now };
+                _context.PhysicalPerson.Add(physicalPersonEntity);
+                _context.SaveChanges();
 
-            UserDTO userDTO = new UserDTO() { AddressId = userEntity.AddressId, CPFId = userEntity.CPFId, ContactNumber = userEntity.ContactNumber, Email = userEntity.Email, UserType = userEntity.UserType };
+                AddressEntity addressEntity = new AddressEntity() { City = vm.City, State = vm.State, Neighborhood = vm.Neighborhood, Street = vm.Street, CreationDate = DateTime.Now };
+                _context.Address.Add(addressEntity);
+                _context.SaveChanges();
 
-            return userDTO;
-        }
 
-        [HttpPost]
-        [Route("RegisterSeller")]
-        public UserDTO RegisterSeller(UserViewModel vm)
-        {
-            var cnpjExist = _context.LegalPerson.FirstOrDefault(x => x.CNPJ == vm.CNPJ);
-            if (cnpjExist != null) throw new Exception("CNPJ já cadastrado");
+                UserEntity userEntity = new UserEntity() { AddressId = addressEntity.Id, CPFId = physicalPersonEntity.Id, ContactNumber = vm.ContactNumber, Email = vm.Email, UserType = vm.UserType, CreationDate = DateTime.Now };
+                _context.Users.Add(userEntity);
+                _context.SaveChanges();
 
-            var emailExist = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
-            if (emailExist != null) throw new Exception("Email já cadastrado");
 
-            AddressEntity addressEntity = new AddressEntity() { City = vm.City, State = vm.State, Neighborhood = vm.Neighborhood, Street = vm.Street, CreationDate = DateTime.Now };
-            _context.Address.Add(addressEntity);
+                userDTO = new UserDTO() { Id = userEntity.Id, AddressId = userEntity.AddressId, CPFId = userEntity.CPFId, ContactNumber = userEntity.ContactNumber, Email = userEntity.Email, UserType = userEntity.UserType };
+            }
 
-            LegalPersonEntity legalPersonEntity = new LegalPersonEntity() { CNPJ = vm.CPF, Representative = vm.Representative, CreationDate = DateTime.Now };
-            _context.LegalPerson.Add(legalPersonEntity);
+            if(vm.CNPJ != null)
+            {
+                var cnpjExist = _context.LegalPerson.FirstOrDefault(x => x.CNPJ == vm.CNPJ);
+                if (cnpjExist != null) throw new Exception("CNPJ já cadastrado");
 
-            UserEntity userEntity = new UserEntity() { AddressId = addressEntity.Id, CPFId = legalPersonEntity.Id, ContactNumber = vm.ContactNumber, Email = vm.Email, UserType = Enums.UserType.SELLER, CreationDate = DateTime.Now };
-            _context.Users.Add(userEntity);
+                var emailExist = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
+                if (emailExist != null) throw new Exception("Email já cadastrado");
 
-            UserDTO userDTO = new UserDTO() { AddressId = userEntity.AddressId, CPFId = userEntity.CNPJId, ContactNumber = userEntity.ContactNumber, Email = userEntity.Email, UserType = userEntity.UserType };
+                AddressEntity addressEntity = new AddressEntity() { City = vm.City, State = vm.State, Neighborhood = vm.Neighborhood, Street = vm.Street, CreationDate = DateTime.Now };
+                _context.Address.Add(addressEntity);
+                _context.SaveChanges();
 
-            return userDTO;
-        }
+                LegalPersonEntity legalPersonEntity = new LegalPersonEntity() { CNPJ = vm.CNPJ, Representative = vm.Representative, CompanyName = vm.CompanyName, CreationDate = DateTime.Now };
+                _context.LegalPerson.Add(legalPersonEntity);
+                _context.SaveChanges();
 
-        [HttpPost]
-        [Route("RegisterAdmin")]
-        public UserDTO RegisterAdmin(UserViewModel vm)
-        {
-            var cnpjExist = _context.LegalPerson.FirstOrDefault(x => x.CNPJ == vm.CNPJ);
-            if (cnpjExist != null) throw new Exception("CNPJ já cadastrado");
+                UserEntity userEntity = new UserEntity() { AddressId = addressEntity.Id, CNPJId = legalPersonEntity.Id, ContactNumber = vm.ContactNumber, Email = vm.Email, UserType = vm.UserType, CreationDate = DateTime.Now };
+                _context.Users.Add(userEntity);
+                _context.SaveChanges();
 
-            var emailExist = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
-            if (emailExist != null) throw new Exception("Email já cadastrado");
+                userDTO = new UserDTO() { Id = userEntity.Id, AddressId = userEntity.AddressId, CPFId = userEntity.CNPJId, ContactNumber = userEntity.ContactNumber, Email = userEntity.Email, UserType = userEntity.UserType };
 
-            AddressEntity addressEntity = new AddressEntity() { City = vm.City, State = vm.State, Neighborhood = vm.Neighborhood, Street = vm.Street, CreationDate = DateTime.Now };
-            _context.Address.Add(addressEntity);
-
-            LegalPersonEntity legalPersonEntity = new LegalPersonEntity() { CNPJ = vm.CPF, Representative = vm.Representative, CreationDate = DateTime.Now };
-            _context.LegalPerson.Add(legalPersonEntity);
-
-            UserEntity userEntity = new UserEntity() { AddressId = addressEntity.Id, CPFId = legalPersonEntity.Id, ContactNumber = vm.ContactNumber, Email = vm.Email, UserType = Enums.UserType.ADMIN, CreationDate = DateTime.Now };
-            _context.Users.Add(userEntity);
-
-            UserDTO userDTO = new UserDTO() { AddressId = userEntity.AddressId, CPFId = userEntity.CNPJId, ContactNumber = userEntity.ContactNumber, Email = userEntity.Email, UserType = userEntity.UserType };
+            }
 
             return userDTO;
         }
@@ -131,16 +118,16 @@ namespace LiquorStore.Controllers
         public bool DeleteUser(UserViewModel vm)
         {
             var cnpjExist = _context.LegalPerson.FirstOrDefault(x => x.CNPJ == vm.CNPJ);
-            if (cnpjExist != null) throw new Exception("Usuário ADMIN não recoonhecido, verifique as credenciais.");
+            if (cnpjExist == null) throw new Exception("Usuário ADMIN não recoonhecido, verifique as credenciais.");
 
             var emailExist = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
-            if (emailExist != null) throw new Exception("Usuário ADMIN não recoonhecido, verifique as credenciais.");
+            if (emailExist == null) throw new Exception("Usuário ADMIN não recoonhecido, verifique as credenciais.");
 
             var userAdmin = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
             if (userAdmin.UserType != Enums.UserType.ADMIN) throw new Exception("Usuário não tem permissão para realizar está ação.");
 
-            var user = _context.Users.FirstOrDefault(x => x.Email == vm.Email);
-            if (user != null) throw new Exception("Usuário a ser removido não existe ou já foi removido.");
+            var user = _context.Users.FirstOrDefault(x => x.Email == vm.DeleteUser);
+            if (user == null) throw new Exception("Usuário a ser removido não existe ou já foi removido.");
 
             if(user.CPFId != null)
             {

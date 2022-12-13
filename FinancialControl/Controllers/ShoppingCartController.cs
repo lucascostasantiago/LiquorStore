@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using LiquorStore.Enums;
 using System.Collections.Generic;
+using LiquorStore.Migrations;
 
 namespace LiquorStore.Controllers
 {
@@ -92,6 +93,24 @@ namespace LiquorStore.Controllers
         private static void ValidateUserRole(UserDTO dto)
         {
             if(dto.UserType != UserType.CUSTOMER) throw new Exception("Usuário não tem permissão para realizar está ação.");
+        }
+
+        [HttpGet("{id}")]
+        public ShoppingCartDTO GetById(Guid id)
+        {
+            var entity = _context.ShoppingCarts.FirstOrDefault(product => product.Id == id);
+            if (entity == null) throw new Exception("Produto não existente.");
+
+
+            ShoppingCartDTO productsDTO = new ShoppingCartDTO()
+            {
+                Id = entity.Id,
+                ProductId = entity.ProductId,
+                ClientId = entity.ClientId,
+                Amount = entity.Amount,
+            };
+            
+            return productsDTO;
         }
     }
 }

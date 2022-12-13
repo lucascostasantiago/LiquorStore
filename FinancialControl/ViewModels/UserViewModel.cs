@@ -11,6 +11,7 @@ namespace LiquorStore.ViewModels
         public Guid? CPFId { get; set; } = null;
         public string ContactNumber { get; set; }
         public string Email { get; set; }
+        public string DeleteUser { get; set; }
         public UserType UserType { get; set; }
         public string CPF { get; set; }
         public string CNPJ { get; set; }
